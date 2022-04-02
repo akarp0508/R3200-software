@@ -117,8 +117,7 @@ jmp [r0,'return_after_function']
 
 
 
-
-
+#align 4
 gpu_page_sizes:
 .words 4000 2000 8000 16000 8000 32000 64000 32000 128000 0 128000
 
