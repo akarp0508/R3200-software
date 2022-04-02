@@ -50,7 +50,6 @@ jmp [r0,'gpu_print_ASCII']
 
 
 bios_start:
-stp
 
 
 
