@@ -47,10 +47,38 @@ ret
 
 built_in_functions:
 jmp [r0,'gpu_print_ASCII']
+; Parameters:
+;   carriage location       <= top of the stack
+;   first character address
+;   colors
+jmp [r0,'gpu_fill_page']
+; Parameters:
+;   data to fill the page with       <= top of the stack
+jmp [r0,'gpu_text_mode_draw_window']
+; Parameters:
+;   x1                              <= top of the stack
+;   y1
+;   x2
+;   y2
+;   colors
 
 #include "built-in_functions.asm"
 
 bios_start:
+;set up palette
+mov r1 $20000020
+mov r2 'cga_text_palette'
+palette_loop:
+cpw r1+ r2+
+cmp r1 $20000040
+bne [r0,'palette_loop'] ; load color palette
+;call draw window function
+mov r1 1
+mov r2 1
+mov r3 10
+mov r4 10
+mov r5 $10
+
 
 bios_start_gpu_init:
 mov r1 $0FFF0000
@@ -60,3 +88,7 @@ stw r3 [r0,$20000004] ; set page address & page pointer (r3)
 mov r1 1
 stb r1 [r0,$20000001] ; enable rendering
 
+#align 4
+cga_text_palette:
+.hwords $0000 $000A $00A0 $00AA $0A00 $0A0A $0A50 $0AAA
+.hwords $0555 $055F $05F5 $05FF $0F55 $0F5F $0FF5 $0FFF
